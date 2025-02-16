@@ -38,5 +38,5 @@ app.get("/", (() => {
 
 
 app.listen({port: 3333}).then(() =>{
-    console.log(" Ta rodano essa bagaça KKKKDIOASUHDUIASd")
+    console.log("ta subido")
 })
