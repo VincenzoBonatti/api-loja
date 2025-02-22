@@ -33,10 +33,10 @@ app.register(routes)
 
 
 app.get("/", (() => {
-    return "hello world"
+    return {hello: "hello world"}
 }))
 
 
 app.listen({port: 3333, host: "0.0.0.0"}).then(() =>{
-    console.log("ta subido")
+    console.log("ta subido aaaa")
 })
