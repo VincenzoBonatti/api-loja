@@ -23,8 +23,12 @@ WORKDIR /usr/src/app
 RUN --mount=type=bind,source=package.json,target=package.json \
     --mount=type=bind,source=package-lock.json,target=package-lock.json \
     --mount=type=cache,target=/root/.npm \
-    npm ci --omit=dev
+    npm ci --omit=dev \
+    npm install
 
+
+
+    
 # Run the application as a non-root user.
 USER node
 
@@ -35,4 +39,4 @@ COPY . .
 EXPOSE 3333
 
 # Run the application.
-CMD npm run dev
+CMD ["npm", "run", "dev"]
