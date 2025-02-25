@@ -6,7 +6,8 @@ import z, { Schema } from "zod";
 interface User {
     id: string,
     name: string,
-    email: string
+    email: string,
+    senha: string
 }
 
 const users: User[] = []
@@ -24,7 +25,8 @@ export async function routes(app:FastifyTypedInstance) {
                 200: z.array(z.object({
                     id: z.string(),
                     name: z.string(),
-                    email: z.string()
+                    email: z.string(),
+                    senha: z.string(),
                 }))
             }
         }
@@ -42,6 +44,7 @@ export async function routes(app:FastifyTypedInstance) {
             body: z.object({
                 name: z.string(),
                 email: z.string().email(),
+                senha: z.string()
                 
             }),
             response: {
@@ -51,12 +54,13 @@ export async function routes(app:FastifyTypedInstance) {
         },
     }, async (request, reply) =>{
 
-        const{ name, email } = request.body
+        const{ name, email, senha} = request.body
 
         users.push({
             id:randomUUID(),
             name,
-            email
+            email,
+            senha
         })
 
 
