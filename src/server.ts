@@ -12,7 +12,12 @@ app.setValidatorCompiler(validatorCompiler)
 app.setSerializerCompiler(serializerCompiler)
 
 
-app.register(fastifyCors, {origin: "*"})
+app.register(fastifyCors, {
+    origin: /\*/,
+    allowedHeaders: ['Origin', 'X-Requested-With', 'Accept', 'Content-Type', 'Authorization'],
+    methods: ['GET', 'PUT', 'PATCH', 'POST', 'DELETE']
+ })
+ 
 
 
 app.register(fastifySwagger, {
