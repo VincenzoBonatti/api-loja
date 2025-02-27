@@ -49,21 +49,22 @@ export async function routes(app:FastifyTypedInstance) {
             }),
             response: {
                 201: z.null().describe("user created"),
-
+                
             },
         },
     }, async (request, reply) =>{
-
-        const{ name, email, senha} = request.body
-
-        users.push({
-            id:randomUUID(),
-            name,
-            email,
-            senha
-        })
-
-
-        return reply.status(200).send()
+        const {name, email, senha} = request.body
+        let verificador = users.find(el => el.email === email)
+        if(!verificador){          
+            users.push({
+                id:randomUUID(),
+                name, 
+                email,
+                senha
+            })
+            return reply.status(201).send()
+        } else if (verificador){
+            return reply.status(409).send()
+        }
     })
 }   
