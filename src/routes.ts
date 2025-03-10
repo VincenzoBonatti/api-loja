@@ -1,7 +1,7 @@
 import { FastifyTypedInstance } from "./types";
 import { randomUUID } from "node:crypto";
 import z, { Schema } from "zod";
-
+import { getUserId, getUsers, postUser } from "./schemas"
 
 interface User {
     id: string,
@@ -17,42 +17,23 @@ const users: User[] = []
 export async function routes(app:FastifyTypedInstance) {
 
     
-    app.get("/users", {
-        schema: {
-            tags: ["users"],
-            description: "get all users",
-            response: {
-                200: z.array(z.object({
-                    id: z.string(),
-                    name: z.string(),
-                    email: z.string(),
-                    senha: z.string(),
-                }))
-            }
-        }
-
-    },() =>{
+    app.get("/users/:name", getUserId, async (request, reply) =>{
+        let verificador = users.find(el => el.name === request.params)
         
+        if(!verificador){
+            return reply.status(410).send()
+        } else if (verificador){
+            return verificador
+        }
+    })
+
+
+    app.get("/users", getUsers,() =>{
         return users
     })
 
 
-    app.post("/users", {
-        schema: {
-            tags: ["users"],
-            description: "create a new user",
-            body: z.object({
-                name: z.string(),
-                email: z.string().email(),
-                senha: z.string()
-                
-            }),
-            response: {
-                201: z.null().describe("user created"),
-                
-            },
-        },
-    }, async (request, reply) =>{
+    app.post("/users", postUser, async (request, reply) =>{
         const {name, email, senha} = request.body
         let verificador = users.find(el => el.email === email)
         if(!verificador){          
@@ -62,7 +43,7 @@ export async function routes(app:FastifyTypedInstance) {
                 email,
                 senha
             })
-            return reply.status(201).send()
+            return reply.status(200).send()
         } else if (verificador){
             return reply.status(409).send()
         }
