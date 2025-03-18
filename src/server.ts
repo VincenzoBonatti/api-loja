@@ -3,7 +3,7 @@ import { fastifyCors } from "@fastify/cors";
 import { validatorCompiler, serializerCompiler, ZodTypeProvider, jsonSchemaTransform } from "fastify-type-provider-zod";
 import fastifySwagger from "@fastify/swagger";
 import fastifySwaggerUi from "@fastify/swagger-ui";
-import { routes } from "./routes";
+import { routes } from "./controller";
 
 
 const app = fastify().withTypeProvider<ZodTypeProvider>()

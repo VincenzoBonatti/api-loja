@@ -47,7 +47,54 @@ import z from "zod";
                     
                 },
             },
-        }
+        },
+
+        getProducts: {
+            schema: {
+                tags: ["products"],
+                description: "get all products",
+                response: {
+                    200: z.array(z.object({
+                        id: z.string(),
+                        name: z.string(),
+                        estoque: z.number(),
+                        preco: z.number(),
+                    }))
+                }
+            }
+        },
+
+        postProducts: {
+            schema: {
+                tags: ["products"],
+                description: "create a new product",
+                body: z.object({
+                    name: z.string(),
+                    estoque: z.number().int(),
+                    preco: z.number()
+                    
+                }),
+                response: {
+                    200: z.null().describe("product created"),
+                    
+                },
+            },
+        },
+
+        getProductId: {
+            schema: {
+                tags: ["products"],
+                description: "get product by id",
+                response: {
+                    200: z.object({
+                        id: z.string(),
+                        name: z.string(),
+                        estoque: z.number(),
+                        preco: z.number(),
+                    })
+                }
+            }
+        },
 
     }
 
