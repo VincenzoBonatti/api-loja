@@ -1,4 +1,5 @@
 import { randomUUID } from "node:crypto";
+import { pgUsers, pgVerEmail, Users } from "./repository";
 
 
 interface User {
@@ -18,6 +19,16 @@ interface Products {
 export const products: Products[] = []
 export const users: User[] = []
 
+export async function ListaUsuarios(request, reply) {
+    try {
+        const usuarios = Users()
+        reply.status(200).send(await usuarios)
+    } catch (error: any) {
+        reply.status(500).send(error.message)
+    }
+}
+
+
 export function userPeloNome(request, reply) {
     let verificador = users.find(el => el.name === request.params.name)
 
@@ -28,19 +39,18 @@ export function userPeloNome(request, reply) {
     }
 }
 
-export function cadastrarUsuario(request, reply) {
+export async function cadastrarUsuario(request, reply) {
     const { name, email, senha } = request.body
-    let verificador = users.find(el => el.email === email)
+    let verificador = await pgVerEmail(email)
     if (!verificador) {
-        users.push({
-            id: randomUUID(),
-            name,
-            email,
-            senha
-        })
-        return reply.status(200).send()
+        try {
+            const resposta = await pgUsers(name, email, senha)
+            return reply.status(200).send(resposta)
+        } catch (error: any) {
+            return reply.status(500).send(error.message)
+        }
     } else if (verificador) {
-        return reply.status(409).send()
+        return reply.status(409).send("email já cadastrado")
     }
 }
 

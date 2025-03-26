@@ -1,6 +1,6 @@
 import { FastifyTypedInstance } from "./types";
 import {schemas} from "./schemas"
-import { cadastrarProduto, cadastrarUsuario, products, productsById, userPeloNome, users } from "./service";
+import { cadastrarProduto, cadastrarUsuario, ListaUsuarios, products, productsById, userPeloNome } from "./service";
 
 
 export async function routes(app:FastifyTypedInstance) {
@@ -10,10 +10,9 @@ export async function routes(app:FastifyTypedInstance) {
        userPeloNome(request, reply)
     })
 
-    app.get("/users", schemas.getUsers,() =>{
-        return users
+    app.get("/users", schemas.getUsers,async (request, reply) =>{
+        return ListaUsuarios(request, reply)
     })
-
 
     app.post("/users", schemas.postUser, async (request, reply) =>{
         cadastrarUsuario(request, reply)
